@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
         socket.join(data.roomName);
         let users = rooms[clients[socket.id].roomName].users;
         io.sockets.in(clients[socket.id].roomName).emit('joined', users);
-        console.log("active users-", users);
+        console.log(`active users in '${clients[socket.id].roomName}'- ${users}`);
     })
     socket.on('sendMessage', (message) => {
         if (clients[socket.id] !== undefined) {
@@ -35,9 +35,10 @@ io.on('connection', (socket) => {
             let users = rooms[clients[socket.id].roomName]["users"];
             users.splice(users.indexOf(clients[socket.id].userName), 1);
             io.sockets.in(clients[socket.id].roomName).emit('joined', users);
-            console.log("active users-", users);
+            console.log(`active users in '${clients[socket.id].roomName}'- ${users}`);
             clients[socket.id] = undefined;
         }
+        console.log(`${socket.id} disconnected from socket`);
     });
     socket.on('leave', () => {
         socket.disconnect();
