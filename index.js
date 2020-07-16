@@ -20,6 +20,7 @@ io.on('connection', (socket) => {
         socket.join(data.roomName);
         let users = rooms[clients[socket.id].roomName].users;
         io.sockets.in(clients[socket.id].roomName).emit('joined', users);
+        console.log("active users-", users);
     })
     socket.on('sendMessage', (message) => {
         socket.to(clients[socket.id].roomName).emit('receiveMessage', message);
@@ -32,6 +33,7 @@ io.on('connection', (socket) => {
             let users = rooms[clients[socket.id].roomName]["users"];
             users.splice(users.indexOf(clients[socket.id].userName), 1);
             io.sockets.in(clients[socket.id].roomName).emit('joined', users);
+            console.log("active users-", users);
             clients[socket.id] = undefined;
         }
     });
