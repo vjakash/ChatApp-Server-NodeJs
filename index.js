@@ -10,7 +10,7 @@ clients = {};
 io.on('connection', (socket) => {
     console.log(`${socket.id} connected to socket`);
     socket.on('create', (data) => {
-        console.log(`${data.userName} user joined Room-${data.roomName}`);
+        console.log(`user-${data.userName} joined Room-${data.roomName}`);
         if (rooms[data.roomName] === undefined) {
             rooms[data.roomName] = { users: [data.userName] };
         } else {
@@ -25,12 +25,14 @@ io.on('connection', (socket) => {
         socket.to(clients[socket.id].roomName).emit('receiveMessage', message);
     })
     socket.on('disconnect', () => {
-        console.log(`${clients[socket.id].userName} user disconnected`);
-        // console.log(rooms[clients[socket.id]["roomName"]]["users"]);
-        let users = rooms[clients[socket.id].roomName]["users"];
-        users.splice(users.indexOf(clients[socket.id].userName, 1));
-        io.sockets.in(clients[socket.id].roomName).emit('joined', users);
-        clients[socket.id] = undefined;
+        if (clients[socket.id] !== undefined) {
+            console.log(`user -${clients[socket.id].userName}  disconnected`);
+            // console.log(rooms[clients[socket.id]["roomName"]]["users"]);
+            let users = rooms[clients[socket.id].roomName]["users"];
+            users.splice(users.indexOf(clients[socket.id].userName, 1));
+            io.sockets.in(clients[socket.id].roomName).emit('joined', users);
+            clients[socket.id] = undefined;
+        }
     });
     socket.on('leave', () => {
         socket.disconnect();
