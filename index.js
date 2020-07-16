@@ -23,7 +23,9 @@ io.on('connection', (socket) => {
         console.log("active users-", users);
     })
     socket.on('sendMessage', (message) => {
-        socket.to(clients[socket.id].roomName).emit('receiveMessage', message);
+        if (clients[socket.id] !== undefined) {
+            socket.to(clients[socket.id].roomName).emit('receiveMessage', message);
+        }
     })
     socket.on('disconnect', () => {
         if (clients[socket.id] !== undefined) {
