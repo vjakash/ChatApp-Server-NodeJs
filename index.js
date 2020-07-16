@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
     })
     socket.on('disconnect', () => {
         if (clients[socket.id] !== undefined) {
-            console.log(`user -${clients[socket.id].userName}  disconnected`);
+            console.log(`user -${clients[socket.id].userName}  disconnected from room-${clients[socket.id].roomName}`);
             // console.log(rooms[clients[socket.id]["roomName"]]["users"]);
             let users = rooms[clients[socket.id].roomName]["users"];
             users.splice(users.indexOf(clients[socket.id].userName, 1));
